@@ -15,7 +15,8 @@ const ZONES = [
   { id: 'pano-dining',   zh: '餐饮卡座区',       en: 'DINING BOOTHS',   x: 57, y: 66 },
   { id: 'pano-billiard', zh: '台球区',           en: 'BILLIARDS',       x: 37, y: 85 },
 ];
-const src = (z) => 'panos/' + z.id + '.jpg';
+const ASSET_VERSION = '20260706-sharp';
+const src = (z) => 'panos/' + z.id + '.jpg?v=' + ASSET_VERSION;
 
 const cream = '#efe8db', gold = '#c6a563', goldB = '#e8c887', muted = '#a89e8b', ink = '#080706';
 const glass = { background: 'rgba(13,11,9,.52)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(198,165,99,.22)' };
@@ -61,7 +62,7 @@ function Minimap({ idx, go, open, setOpen }) {
         <button className="bs-hov" onClick={() => setOpen(false)} style={{ width: 22, height: 22, borderRadius: 6, cursor: 'pointer', background: 'transparent', border: '1px solid rgba(198,165,99,.28)', color: goldB, fontSize: 13, lineHeight: 1, padding: 0 }}>×</button>
       </div>
       <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(198,165,99,.2)' }}>
-        <img src="floorplan/plan-full.png" alt="2F" style={{ display: 'block', width: '100%', filter: 'grayscale(.25) sepia(.16) brightness(.97) contrast(1.02)' }} />
+        <img src={'floorplan/plan-full.png?v=' + ASSET_VERSION} alt="2F" style={{ display: 'block', width: '100%', filter: 'grayscale(.25) sepia(.16) brightness(.97) contrast(1.02)' }} />
         {ZONES.map((z, i) => {
           const on = i === idx;
           return (
@@ -138,8 +139,9 @@ function BackspinVR(props) {
       const host = hostRef.current; host.innerHTML = '';
       const scene = new THREE.Scene();
       const cam = new THREE.PerspectiveCamera(66, 1, 0.1, 200); cam.rotation.order = 'YXZ';
-      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
       host.appendChild(renderer.domElement);
       renderer.domElement.style.cssText = 'width:100%;height:100%;display:block;touch-action:none;cursor:grab';
 
@@ -150,7 +152,7 @@ function BackspinVR(props) {
       const loader = new THREE.TextureLoader();
       const loadTex = (s) => new Promise((res, rej) => loader.load(s, (t) => {
         t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy();
-        t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; res(t);
+        t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter; res(t);
       }, undefined, () => rej()));
 
       let cur = -1, first = true;
