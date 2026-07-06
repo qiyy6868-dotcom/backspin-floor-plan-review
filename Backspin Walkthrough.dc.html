@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&amp;family=Noto+Serif+SC:wght@500;700&amp;display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; background: #121110; }
+    @keyframes bsPulse { 0% { box-shadow: 0 0 0 0 rgba(185,154,95,.55); } 100% { box-shadow: 0 0 0 14px rgba(185,154,95,0); } }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;background:#121110;color:#ece5d8;font-family:'Noto Serif SC',serif">
+
+  <!-- HERO -->
+  <div style="max-width:1200px;margin:0 auto;padding:64px 40px 40px 40px;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-family:Marcellus,serif;letter-spacing:.35em;font-size:13px;color:#b99a5f">BACKSPIN ARCADE · LEVEL 2</div>
+      <h1 style="margin:0;font-size:44px;font-weight:700;line-height:1.15">二层全景漫游 <span style="font-family:Marcellus,serif;font-weight:400;color:#9d9484;font-size:26px">Walkthrough</span></h1>
+      <p style="margin:0;max-width:720px;color:#b3aa99;font-size:16px;line-height:1.8">从入口开始，沿动线走遍每一个角落。已有风格效果图的区域直接呈现；尚未出图的区域已留好版位，AI 渲染图完成后拖入即可。</p>
+    </div>
+
+    <!-- PLAN MAP WITH ROUTE -->
+    <sc-if value="{{ showPlanMap }}" hint-placeholder-val="{{ true }}">
+      <div style="position:relative;border:1px solid #2b2823;border-radius:10px;overflow:hidden;background:#f5f2ec">
+        <img src="floorplan/plan-full.png" style="display:block;width:100%;filter:sepia(.12)" alt="2F floor plan">
+        <sc-for list="{{ mapDots }}" as="d" hint-placeholder-count="11">
+          <a href="{{ d.href }}" style="position:absolute;left:{{ d.x }};top:{{ d.y }};transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:#1d1b18;color:#e8c887;border:1px solid #b99a5f;display:flex;align-items:center;justify-content:center;font-size:12px;font-family:Marcellus,serif;text-decoration:none;animation:bsPulse 2.4s infinite">{{ d.n }}</a>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- STOPS -->
+  <div style="max-width:1200px;margin:0 auto;padding:0 40px 80px 40px;display:flex;flex-direction:column;gap:56px">
+
+    <!-- 01 ENTRANCE -->
+    <div id="stop-1" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">01</span><h2 style="margin:0;font-size:26px">入口 · 接待</h2></div>
+        <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">ENTRANCE &amp; RECEPTION</div>
+        <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">弧形特色墙引导进入，黑色大理石接待台配拉丝黄铜 logo，檐口暗藏灯带。推门即见推杆果岭与吧台的纵深视野。</p>
+      </div>
+      <image-slot id="slot-entrance" style="width:100%;height:420px" shape="rounded" radius="12" placeholder="入口效果图 — 拖入 AI 渲染图"></image-slot>
+    </div>
+
+    <!-- 02 PUTTING -->
+    <div id="stop-2" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">02</span><h2 style="margin:0;font-size:26px">推杆果岭区</h2></div>
+        <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">PUTTING AREA</div>
+        <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">自由曲线果岭嵌于入口景观带，灯带勾勒边缘，墨绿绒面与暖白石材相接，是进店后的第一处打卡点。</p>
+      </div>
+      <img src="assets/reception-putting.png" style="width:100%;height:420px;object-fit:cover;border-radius:12px;transition:transform .8s" style-hover="transform:scale(1.03)" alt="Putting area">
+    </div>
+
+    <!-- 03 SIM BAYS -->
+    <div id="stop-3" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">03</span><h2 style="margin:0;font-size:26px">高尔夫模拟打位 ×4</h2></div>
+        <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">FREE RANGE BAYS #1–#4</div>
+        <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">北墙一排四个模拟器打位：奶油色圆拱开口 + 灯带描边，位间以弧面软包分隔，打位前布置弧形卡座与大理石圆桌，边打边餐饮。</p>
+      </div>
+      <img src="assets/golf-bays.webp" style="width:100%;height:420px;object-fit:cover;border-radius:12px;transition:transform .8s" style-hover="transform:scale(1.03)" alt="Golf simulator bays">
+    </div>
+
+    <!-- 04 VIP -->
+    <div id="stop-4" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">04</span><h2 style="margin:0;font-size:26px">高尔夫 VIP 模拟包间</h2></div>
+        <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">VIP GOLF COMPARTMENT</div>
+        <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">东北角独立包间：双向模拟器 + 私享卡座，隔音软包墙、独立点单，适合私宴与教学。</p>
+      </div>
+      <image-slot id="slot-vip" style="width:100%;height:420px" shape="rounded" radius="12" placeholder="VIP 包间效果图 — 拖入 AI 渲染图"></image-slot>
+    </div>
+
+    <!-- 05 BAR -->
+    <div id="stop-5" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">05</span><h2 style="margin:0;font-size:26px">中央吧台</h2></div>
+        <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">CENTRAL BAR · DISPLAY SCREEN</div>
+        <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">全场核心：黑金大理石弧形岛台，竖纹金属立面 + 底部灯带，上方环形屏播放赛事；配升降电视与展示酒墙。</p>
+      </div>
+      <img src="assets/bar.png" style="width:100%;height:420px;object-fit:cover;border-radius:12px;transition:transform .8s" style-hover="transform:scale(1.03)" alt="Central bar">
+    </div>
+
+    <!-- 06 PERFORMANCE -->
+    <div id="stop-6" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">06</span><h2 style="margin:0;font-size:26px">散座区</h2></div>
+        <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">SEATING AREA</div>
+        <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">吧台与下沉区之间的开敞座位区，四人圆桌灵活布置，面向歌台，视线通达全场。</p>
+      </div>
+      <image-slot id="slot-performance" style="width:100%;height:420px" shape="rounded" radius="12" placeholder="散座区效果图 — 拖入 AI 渲染图"></image-slot>
+    </div>
+
+    <!-- 07 SUNKEN LOUNGE -->
+    <div id="stop-7" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">07</span><h2 style="margin:0;font-size:26px">下沉式景观卡座（含歌台）</h2></div>
+        <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">SUNKEN LOUNGE &amp; STAGE</div>
+        <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">西侧下沉围合区：环形沙发抱着中央圆形歌台，降板两级 + 台阶灯带，是全场氛围最浓的一角。</p>
+      </div>
+      <img src="assets/vip-room.png" style="width:100%;height:420px;object-fit:cover;border-radius:12px;transition:transform .8s" style-hover="transform:scale(1.03)" alt="Sunken lounge">
+    </div>
+
+    <!-- 08 DART -->
+    <div id="stop-8" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">08</span><h2 style="margin:0;font-size:26px">客人吧台座位</h2></div>
+        <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">GUEST BAR SEATING</div>
+        <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">环吧台一圈的高脚客座：竖纹金属吧台立面 + 黄铜脚踏，皮革高脚椅面向酒墙与环形赛事屏。</p>
+      </div>
+      <image-slot id="slot-barseat" style="width:100%;height:420px" shape="rounded" radius="12" placeholder="吧台座位效果图 — 拖入 AI 渲染图"></image-slot>
+    </div>
+
+    <!-- 09 DINING -->
+    <div id="stop-9" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">09</span><h2 style="margin:0;font-size:26px">餐饮卡座区</h2></div>
+        <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">DINING LOUNGE · PICK-UP WINDOW</div>
+        <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">弧形沙发卡座一列排开，每座配电视；后厨出餐口就近服务，动线不穿越游戏区。</p>
+      </div>
+      <image-slot id="slot-dining" style="width:100%;height:420px" shape="rounded" radius="12" placeholder="餐饮卡座效果图 — 拖入 AI 渲染图"></image-slot>
+    </div>
+
+    <!-- 10 BILLIARDS -->
+    <div id="stop-10" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">10</span><h2 style="margin:0;font-size:26px">台球区</h2></div>
+        <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">BILLIARD AREA</div>
+        <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">南区八张球台：墨绿台呢 + 黑檀金属包边，皮革与丝绒休息组穿插其间，暗色印花地毯吸音，镜面吊顶灯带压低重心。</p>
+      </div>
+      <img src="assets/billiards-lounge.png" style="width:100%;height:420px;object-fit:cover;border-radius:12px;transition:transform .8s" style-hover="transform:scale(1.03)" alt="Billiards area">
+    </div>
+
+    <!-- 11 BOH -->
+    <sc-if value="{{ showBackOfHouse }}" hint-placeholder-val="{{ true }}">
+      <div id="stop-11" style="display:grid;grid-template-columns:380px 1fr;gap:36px;border-top:1px solid #2b2823;padding-top:44px">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:Marcellus,serif;font-size:30px;color:#b99a5f">11</span><h2 style="margin:0;font-size:26px">后勤 · 配套</h2></div>
+          <div style="font-family:Marcellus,serif;letter-spacing:.2em;font-size:12px;color:#9d9484">PREP KITCHEN · WC · STAIRWELL</div>
+          <p style="margin:0;color:#b3aa99;font-size:15px;line-height:1.9">东南角集中布置备餐厨房、男女卫生间、清洁间、设备房与疏散楼梯，服务动线与客人动线完全分离。</p>
+        </div>
+        <div style="width:100%;height:220px;border:1px dashed #3a352d;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#6f675a;font-size:14px">后勤区不出效果图 — 详见施工图</div>
+      </div>
+    </sc-if>
+
+    <div style="border-top:1px solid #2b2823;padding-top:28px;color:#6f675a;font-size:13px;line-height:1.8">虚线框区域为预留版位：用 AI 渲染工具（参考已有风格图出图）生成后，直接拖入对应框即可保存。</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showPlanMap&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;内容&quot;}, &quot;showBackOfHouse&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;内容&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const dots = [
+      { n: '01', x: '33%', y: '51%', href: '#stop-1' },
+      { n: '02', x: '37%', y: '42%', href: '#stop-2' },
+      { n: '03', x: '52%', y: '41%', href: '#stop-3' },
+      { n: '04', x: '69%', y: '44%', href: '#stop-4' },
+      { n: '05', x: '47%', y: '56%', href: '#stop-5' },
+      { n: '06', x: '50%', y: '48%', href: '#stop-6' },
+      { n: '07', x: '28%', y: '66%', href: '#stop-7' },
+      { n: '08', x: '55%', y: '62%', href: '#stop-8' },
+      { n: '09', x: '58%', y: '70%', href: '#stop-9' },
+      { n: '10', x: '37%', y: '84%', href: '#stop-10' },
+      { n: '11', x: '69%', y: '72%', href: '#stop-11' }
+    ];
+    return {
+      mapDots: dots,
+      showPlanMap: this.props.showPlanMap ?? true,
+      showBackOfHouse: this.props.showBackOfHouse ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>

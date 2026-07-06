@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&amp;family=Noto+Serif+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; height: 100%; background: #080706; overflow: hidden; }
+    @keyframes bsRise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @keyframes bsFade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes bsSpin { to { transform: rotate(360deg); } }
+    @keyframes bsPulse { 0% { transform: scale(1); opacity: .6; } 70% { transform: scale(2.7); opacity: 0; } 100% { opacity: 0; } }
+    @keyframes bsFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    .bs-hov:hover { background: rgba(198,165,99,.16) !important; border-color: #e8c887 !important; color: #f4ecd8 !important; }
+    .bs-enter:hover { background: #c6a563 !important; color: #1a150e !important; letter-spacing: .26em !important; }
+    .bs-card:hover { transform: translateY(-4px); }
+    .bs-dot:hover { transform: translate(-50%,-50%) scale(1.28) !important; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: rgba(198,165,99,.3); border-radius: 6px; }
+  </style>
+</helmet>
+<div style="position:fixed;inset:0;background:#080706">
+  <x-import component="BackspinVR" from="./backspin-vr.jsx" auto-rotate="{{ autoRotateVal }}" intro-splash="{{ introVal }}" show-minimap="{{ minimapVal }}" hint-size="100%,100%"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;autoRotate&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;导览&quot;}, &quot;introSplash&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;导览&quot;}, &quot;showMinimap&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;导览&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      autoRotateVal: this.props.autoRotate ?? true,
+      introVal: this.props.introSplash ?? true,
+      minimapVal: this.props.showMinimap ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>

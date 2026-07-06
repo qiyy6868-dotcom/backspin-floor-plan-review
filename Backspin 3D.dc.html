@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; height: 100%; background: #0c0b09; }
+  </style>
+</helmet>
+<div style="width:100vw;height:100vh;position:relative">
+  <x-import component="BackspinScene" from="./backspin-scene.jsx" auto-tour="{{ autoTourVal }}" exposure="{{ exposureVal }}" hint-size="100%,100vh"></x-import>
+  <a href="Backspin Walkthrough.dc.html" style="position:absolute;top:56px;right:24px;color:#8a8172;font-size:12px;text-decoration:none;border:1px solid #3a352c;border-radius:999px;padding:6px 14px;background:rgba(20,18,15,.7);font-family:'Noto Serif SC',serif">← 返回图文版</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;autoTour&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;漫游&quot;}, &quot;exposure&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 1.15, &quot;min&quot;: 0.7, &quot;max&quot;: 1.6, &quot;step&quot;: 0.05, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;漫游&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      autoTourVal: this.props.autoTour ?? false,
+      exposureVal: this.props.exposure ?? 1.15
+    };
+  }
+}
+</script>
+</body>
+</html>
