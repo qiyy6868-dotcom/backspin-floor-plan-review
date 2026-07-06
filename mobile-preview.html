@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:,">
+<title>BACKSPIN ARCADE · Mobile Preview</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --ink: #080706;
+    --panel: rgba(11, 10, 8, .72);
+    --gold: #c6a563;
+    --gold-soft: #e8c887;
+    --cream: #f1eadf;
+    --muted: #b6ad9c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--ink); color: var(--cream); font-family: "Noto Serif SC", Georgia, serif; }
+  body { overflow-x: hidden; }
+  .shell { min-height: 100svh; background: #080706; }
+  .topbar {
+    position: fixed; z-index: 20; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: calc(12px + env(safe-area-inset-top)) 14px 10px;
+    background: linear-gradient(rgba(5, 5, 4, .84), rgba(5, 5, 4, .08));
+    pointer-events: none;
+  }
+  .brand { display: flex; align-items: center; gap: 9px; letter-spacing: .18em; font-family: Georgia, serif; font-size: 12px; color: var(--gold-soft); }
+  .mark { width: 28px; height: 28px; border: 1px solid rgba(232, 200, 135, .72); display: grid; place-items: center; color: var(--gold-soft); font-weight: 700; }
+  .nav { display: flex; gap: 7px; pointer-events: auto; }
+  .nav a {
+    color: var(--cream); text-decoration: none; font-size: 11px; letter-spacing: .08em;
+    border: 1px solid rgba(232, 200, 135, .26); background: rgba(15, 13, 10, .62);
+    border-radius: 999px; padding: 7px 10px; backdrop-filter: blur(10px);
+  }
+  .hero, .slide { min-height: 100svh; position: relative; display: flex; align-items: flex-end; overflow: hidden; }
+  .hero img, .slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero::after, .slide::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(transparent 42%, rgba(5, 5, 4, .18) 58%, rgba(5, 5, 4, .9) 100%);
+    pointer-events: none;
+  }
+  .copy { position: relative; z-index: 2; width: 100%; padding: 0 18px calc(74px + env(safe-area-inset-bottom)); }
+  .eyebrow { margin: 0 0 8px; color: var(--gold-soft); letter-spacing: .22em; font-family: Georgia, serif; font-size: 11px; }
+  h1 { margin: 0; font-family: Georgia, "Noto Serif SC", serif; font-size: clamp(44px, 16vw, 74px); line-height: .92; letter-spacing: .1em; font-weight: 500; }
+  h2 { margin: 0; font-size: clamp(28px, 9vw, 44px); line-height: 1.08; letter-spacing: .02em; }
+  .sub { margin: 13px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; max-width: 34rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .chip { border: 1px solid rgba(232, 200, 135, .24); background: rgba(12, 10, 8, .56); color: var(--cream); border-radius: 999px; padding: 8px 11px; font-size: 12px; }
+  .slides { scroll-snap-type: y proximity; }
+  .hero, .slide, .plan { scroll-snap-align: start; }
+  .index { position: absolute; z-index: 2; top: calc(58px + env(safe-area-inset-top)); left: 18px; color: var(--gold-soft); font-family: Georgia, serif; font-size: 13px; letter-spacing: .12em; }
+  .plan { min-height: 100svh; padding: calc(78px + env(safe-area-inset-top)) 16px calc(84px + env(safe-area-inset-bottom)); background: #11100e; }
+  .plan h2 { font-size: clamp(28px, 8vw, 42px); }
+  .plan-card { margin-top: 18px; border-radius: 10px; overflow: hidden; background: #f6f2ea; border: 1px solid rgba(232, 200, 135, .22); }
+  .plan-card img { display: block; width: 100%; height: auto; }
+  .bottom {
+    position: fixed; z-index: 30; left: 0; right: 0; bottom: 0;
+    padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
+    background: linear-gradient(transparent, rgba(5,5,4,.88) 24%, rgba(5,5,4,.98));
+  }
+  .bottom-inner { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 8px; max-width: 680px; margin: 0 auto; }
+  .bottom a {
+    min-height: 42px; display: grid; place-items: center; text-align: center; color: var(--cream); text-decoration: none;
+    border-radius: 999px; background: rgba(24, 21, 17, .86); border: 1px solid rgba(232, 200, 135, .24); font-size: 12px;
+  }
+  .bottom a:first-child { background: rgba(198, 165, 99, .94); color: #17120b; border-color: var(--gold-soft); font-weight: 700; }
+  @media (min-width: 780px) {
+    .copy { padding-left: 44px; padding-bottom: 88px; }
+    .topbar { padding-left: 42px; padding-right: 42px; }
+    .plan { padding-left: 44px; padding-right: 44px; }
+    .plan-card { max-width: 1180px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><span class="mark">B</span><span>BACKSPIN</span></div>
+    <nav class="nav" aria-label="View options">
+      <a href="Backspin%203D.dc.html">3D</a>
+      <a href="Backspin%20VR.dc.html">360</a>
+    </nav>
+  </header>
+
+  <main class="slides">
+    <section class="hero">
+      <img src="mobile-preview/hero.webp?v=20260706-mobile-real" alt="BACKSPIN indoor golf and cocktail lounge preview">
+      <div class="copy">
+        <p class="eyebrow">MOBILE PREVIEW · LEVEL 2</p>
+        <h1>BACKSPIN</h1>
+        <p class="sub">真实感效果预览：高尔夫、吧台、餐酒、包间和台球动线，适合手机直接发给别人看。</p>
+        <div class="chips">
+          <span class="chip">Indoor Golf</span>
+          <span class="chip">Cocktail Bar</span>
+          <span class="chip">Private Suites</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="index">01</div>
+      <img src="mobile-preview/reception-putting.webp?v=20260706-mobile-real" alt="Reception and putting green">
+      <div class="copy">
+        <h2>入口 · 推杆果岭</h2>
+        <p class="sub">入口第一眼的接待、灯带和果岭氛围。</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="index">02</div>
+      <img src="mobile-preview/golf-bays.webp?v=20260706-mobile-real" alt="Indoor golf simulator bays">
+      <div class="copy">
+        <h2>高尔夫打位</h2>
+        <p class="sub">模拟器打位、卡座和餐饮服务场景。</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="index">03</div>
+      <img src="mobile-preview/bar.webp?v=20260706-mobile-real" alt="Central cocktail bar">
+      <div class="copy">
+        <h2>中央吧台</h2>
+        <p class="sub">黑金材质、酒墙、赛事屏和核心社交区。</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="index">04</div>
+      <img src="mobile-preview/vip-room.webp?v=20260706-mobile-real" alt="Private lounge and suite">
+      <div class="copy">
+        <h2>私享包间</h2>
+        <p class="sub">适合私宴、教学、商务接待的封闭式空间。</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="index">05</div>
+      <img src="mobile-preview/billiards-lounge.webp?v=20260706-mobile-real" alt="Billiards lounge">
+      <div class="copy">
+        <h2>台球区</h2>
+        <p class="sub">台球、酒水和深色高级材质的娱乐区域。</p>
+      </div>
+    </section>
+
+    <section class="plan">
+      <p class="eyebrow">FLOOR PLAN</p>
+      <h2>二层动线图</h2>
+      <p class="sub">用效果图看氛围，用平面图确认位置关系。</p>
+      <div class="plan-card">
+        <img src="mobile-preview/floorplan.webp?v=20260706-mobile-real" alt="Backspin level 2 floor plan">
+      </div>
+    </section>
+  </main>
+
+  <div class="bottom">
+    <div class="bottom-inner">
+      <a href="Backspin%20Walkthrough.dc.html">图文完整版</a>
+      <a href="Backspin%203D.dc.html">3D 模型</a>
+      <a href="Backspin%20VR.dc.html">360 预览</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
