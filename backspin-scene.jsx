@@ -640,7 +640,7 @@ function BackspinScene(props) {
       const cam = new THREE.PerspectiveCamera(70, 1, 0.1, 120);
       cam.rotation.order = 'YXZ';
       renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 3));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = exposure;

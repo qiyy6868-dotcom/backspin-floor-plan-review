@@ -15,8 +15,9 @@ const ZONES = [
   { id: 'pano-dining',   zh: '餐饮卡座区',       en: 'DINING BOOTHS',   x: 57, y: 66 },
   { id: 'pano-billiard', zh: '台球区',           en: 'BILLIARDS',       x: 37, y: 85 },
 ];
-const ASSET_VERSION = '20260706-sharp';
-const src = (z) => 'panos/' + z.id + '.jpg?v=' + ASSET_VERSION;
+const ASSET_VERSION = '20260706-4k';
+const panoSrc = (z, highRes) => (highRes ? 'panos-8k/' : 'panos/') + z.id + '.jpg?v=' + ASSET_VERSION;
+const thumbSrc = (z) => 'panos/' + z.id + '.jpg?v=' + ASSET_VERSION;
 
 const cream = '#efe8db', gold = '#c6a563', goldB = '#e8c887', muted = '#a89e8b', ink = '#080706';
 const glass = { background: 'rgba(13,11,9,.52)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(198,165,99,.22)' };
@@ -95,7 +96,7 @@ function GridOverlay({ idx, go, close }) {
             const on = i === idx;
             return (
               <button key={z.id} className="bs-card" onClick={() => { go(i); close(); }}
-                style={{ position: 'relative', aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden', cursor: 'pointer', padding: 0, transition: 'transform .25s', backgroundImage: 'url(' + src(z) + ')', backgroundSize: 'cover', backgroundPosition: 'center', border: '1px solid ' + (on ? goldB : 'rgba(198,165,99,.2)'), boxShadow: on ? '0 0 0 2px ' + goldB : '0 10px 26px rgba(0,0,0,.4)' }}>
+                style={{ position: 'relative', aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden', cursor: 'pointer', padding: 0, transition: 'transform .25s', backgroundImage: 'url(' + thumbSrc(z) + ')', backgroundSize: 'cover', backgroundPosition: 'center', border: '1px solid ' + (on ? goldB : 'rgba(198,165,99,.2)'), boxShadow: on ? '0 0 0 2px ' + goldB : '0 10px 26px rgba(0,0,0,.4)' }}>
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent 38%, rgba(6,5,4,.9))' }} />
                 <div style={{ position: 'absolute', left: 13, bottom: 11, textAlign: 'left' }}>
                   <div style={{ fontFamily: disp, color: goldB, fontSize: 12, letterSpacing: '.12em' }}>{String(i + 1).padStart(2, '0')}</div>
@@ -140,7 +141,7 @@ function BackspinVR(props) {
       const scene = new THREE.Scene();
       const cam = new THREE.PerspectiveCamera(66, 1, 0.1, 200); cam.rotation.order = 'YXZ';
       renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 3));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       host.appendChild(renderer.domElement);
       renderer.domElement.style.cssText = 'width:100%;height:100%;display:block;touch-action:none;cursor:grab';
@@ -155,6 +156,7 @@ function BackspinVR(props) {
         t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter; res(t);
       }, undefined, () => rej()));
 
+      const useHiResPanos = (renderer.capabilities.maxTextureSize || 4096) >= 8192;
       let cur = -1, first = true;
       const trans = { active: false, start: 0, tex: null };
       const goTo = (i) => {
@@ -169,7 +171,8 @@ function BackspinVR(props) {
           matB.map = tex; matB.needsUpdate = true; matB.opacity = 0; matB.visible = true;
           trans.active = true; trans.start = performance.now(); trans.tex = tex;
         };
-        loadTex(src(z)).then(done).catch(() => { const t = new THREE.CanvasTexture(placeholderCanvas(z, i)); t.colorSpace = THREE.SRGBColorSpace; done(t); });
+        const fallback = () => loadTex(panoSrc(z, false)).then(done).catch(() => { const t = new THREE.CanvasTexture(placeholderCanvas(z, i)); t.colorSpace = THREE.SRGBColorSpace; done(t); });
+        loadTex(panoSrc(z, useHiResPanos)).then(done).catch(fallback);
       };
       apiRef.current = { goTo };
       goTo(0);
