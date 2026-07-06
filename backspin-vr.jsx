@@ -15,7 +15,7 @@ const ZONES = [
   { id: 'pano-dining',   zh: '餐饮卡座区',       en: 'DINING BOOTHS',   x: 57, y: 66 },
   { id: 'pano-billiard', zh: '台球区',           en: 'BILLIARDS',       x: 37, y: 85 },
 ];
-const ASSET_VERSION = '20260706-4k';
+const ASSET_VERSION = '20260706-vr-natural';
 const panoSrc = (z, highRes) => (highRes ? 'panos-8k/' : 'panos/') + z.id + '.jpg?v=' + ASSET_VERSION;
 const thumbSrc = (z) => 'panos/' + z.id + '.jpg?v=' + ASSET_VERSION;
 
@@ -139,7 +139,7 @@ function BackspinVR(props) {
       if (dead || !hostRef.current) return;
       const host = hostRef.current; host.innerHTML = '';
       const scene = new THREE.Scene();
-      const cam = new THREE.PerspectiveCamera(66, 1, 0.1, 200); cam.rotation.order = 'YXZ';
+      const cam = new THREE.PerspectiveCamera(88, 1, 0.1, 200); cam.rotation.order = 'YXZ';
       renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
       renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 3));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -177,7 +177,7 @@ function BackspinVR(props) {
       apiRef.current = { goTo };
       goTo(0);
 
-      const st = { yaw: 0, pitch: 0, fov: 66 };
+      const st = { yaw: 0, pitch: 0, fov: 88 };
       const el = renderer.domElement;
       let gyroOn = false, gyroBase = null, lastInter = performance.now();
       const bump = () => { lastInter = performance.now(); };
@@ -185,13 +185,13 @@ function BackspinVR(props) {
       el.addEventListener('pointerdown', (e) => { ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); el.setPointerCapture(e.pointerId); el.style.cursor = 'grabbing'; bump(); if (ptrs.size === 1) lastP = { x: e.clientX, y: e.clientY }; else if (ptrs.size === 2) { const p = [...ptrs.values()]; pinch = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y); } });
       el.addEventListener('pointermove', (e) => {
         if (!ptrs.has(e.pointerId)) return; ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); bump();
-        if (ptrs.size >= 2) { const p = [...ptrs.values()]; const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y); if (pinch) st.fov = Math.max(42, Math.min(92, st.fov - (d - pinch) * 0.12)); pinch = d; lastP = null; return; }
+        if (ptrs.size >= 2) { const p = [...ptrs.values()]; const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y); if (pinch) st.fov = Math.max(58, Math.min(108, st.fov - (d - pinch) * 0.12)); pinch = d; lastP = null; return; }
         if (!lastP) { lastP = { x: e.clientX, y: e.clientY }; return; }
         gyroOn = false; st.yaw += (e.clientX - lastP.x) * 0.0038; st.pitch = Math.max(-1.35, Math.min(1.35, st.pitch + (e.clientY - lastP.y) * 0.0038)); lastP = { x: e.clientX, y: e.clientY };
       });
       const drop = (e) => { ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = 0; if (ptrs.size === 0) { lastP = null; el.style.cursor = 'grab'; } };
       el.addEventListener('pointerup', drop); el.addEventListener('pointercancel', drop);
-      el.addEventListener('wheel', (e) => { e.preventDefault(); st.fov = Math.max(42, Math.min(92, st.fov + e.deltaY * 0.04)); bump(); }, { passive: false });
+      el.addEventListener('wheel', (e) => { e.preventDefault(); st.fov = Math.max(58, Math.min(108, st.fov + e.deltaY * 0.04)); bump(); }, { passive: false });
 
       const onOrient = (e) => { if (!gyroOn || e.alpha == null) return; const a = THREE.MathUtils.degToRad(e.alpha), b = THREE.MathUtils.degToRad(e.beta); if (gyroBase == null) gyroBase = a; st.yaw = -(a - gyroBase); st.pitch = Math.max(-1.2, Math.min(1.2, b - Math.PI / 2)); };
       window.addEventListener('deviceorientation', onOrient, true);
